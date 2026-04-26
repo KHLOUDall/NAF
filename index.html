@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NAF - Elegant Promo</title>
+    <title>NAF Experience</title>
     <style>
         body, html {
             margin: 0;
@@ -25,35 +25,41 @@
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
-            color: #F9EFDB; /* اللون الجديد */
+            color: #F9EFDB; 
             z-index: 10;
-            width: 100%;
+            width: 90%;
         }
 
+        /* تصغير الخط بمقدار بسيط جداً */
         #countdown, #message {
-            font-size: 100px;
+            font-size: 58px; /* كان 60، الآن 58 */
             font-weight: bold;
-            text-shadow: 0 0 20px rgba(249, 239, 219, 0.5);
+            text-shadow: 0 0 15px rgba(249, 239, 219, 0.4);
             display: block;
             margin: 0;
             padding: 0;
         }
 
-        /* أنيميشن الكلمات العادية */
+        /* تنسيق القلب الأبيض */
+        .white-heart {
+            color: white !important;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        }
+
         .fade-in-out {
             animation: fadeInOut 3s forwards;
         }
 
-        /* أنيميشن الكود النهائي الثابت */
         .stay-forever {
             animation: finalAppear 1.5s forwards;
             color: #F9EFDB; 
-            text-shadow: 0 0 30px rgba(249, 239, 219, 0.7);
-            border: 2px solid #F9EFDB;
-            padding: 20px 40px;
+            text-shadow: 0 0 25px rgba(249, 239, 219, 0.6);
+            border: 1.5px solid #F9EFDB;
+            padding: 15px 30px;
             display: inline-block;
             margin-top: 20px;
-            border-radius: 10px;
+            border-radius: 8px;
+            font-size: 43px; /* تصغير الكود أيضاً رقمين */
         }
 
         @keyframes fadeInOut {
@@ -64,13 +70,13 @@
         }
 
         @keyframes finalAppear {
-            0% { opacity: 0; transform: scale(0.9); }
+            0% { opacity: 0; transform: scale(0.95); }
             100% { opacity: 1; transform: scale(1); }
         }
 
         #promo-label {
-            font-size: 30px;
-            margin-bottom: 10px;
+            font-size: 20px; 
+            margin-bottom: 8px;
             display: block;
             color: #F9EFDB;
             opacity: 0.8;
@@ -87,6 +93,10 @@
     </div>
 
     <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const customerName = urlParams.get('name') || "NAF"; 
+        const promoCode = urlParams.get('code') || "naf3000";
+
         const canvas = document.getElementById('matrixCanvas');
         const ctx = canvas.getContext('2d');
 
@@ -94,16 +104,14 @@
         canvas.height = window.innerHeight;
 
         const characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        const fontSize = 16;
+        const fontSize = 14;
         const columns = canvas.width / fontSize;
         const drops = Array(Math.floor(columns)).fill(1);
 
         function drawMatrix() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // لون الحروف في الخلفية أصبح بنفس درجة اللون الجديد ولكن بشفافية
-            ctx.fillStyle = "rgba(249, 239, 219, 0.35)"; 
+            ctx.fillStyle = "rgba(249, 239, 219, 0.25)"; 
             ctx.font = fontSize + "px monospace";
 
             for (let i = 0; i < drops.length; i++) {
@@ -119,8 +127,8 @@
         const countdownElement = document.getElementById('countdown');
         const messageElement = document.getElementById('message');
         
-        const words = ["HAPPY", "BIRTHDAY", "TO", "NAF", "❤"];
-        const promoCode = "naf3000";
+        // استخدام span لتلوين القلب بالأبيض
+        const words = ["HAPPY", "BIRTHDAY", "TO", customerName.toUpperCase(), '<span class="white-heart">❤</span>'];
         let index = 0;
         let count = 3;
 
@@ -139,7 +147,8 @@
 
         function showNextWord() {
             if (index < words.length) {
-                messageElement.innerText = words[index];
+                // استخدام innerHTML بدلاً من innerText ليدعم لون القلب
+                messageElement.innerHTML = words[index];
                 messageElement.classList.remove('fade-in-out');
                 void messageElement.offsetWidth; 
                 messageElement.classList.add('fade-in-out');
@@ -154,7 +163,7 @@
         function showFinalCode() {
             messageElement.classList.remove('fade-in-out');
             messageElement.innerHTML = `
-                <span id="promo-label">:استخدم الكود عند المحاسب</span>
+                <span id="promo-label">استخدم الكود عند المحاسب:</span>
                 <div class="stay-forever">${promoCode}</div>
             `;
         }
